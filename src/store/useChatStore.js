@@ -1,7 +1,9 @@
 import { create } from 'zustand'
 
 export const useChatStore = create((set) => ({
-    messages: [],
+    messages: [
+        { role: 'assistant', content: '안녕하세요. 무엇을 도와드릴까요?' }
+    ],
 
     addUserMessage: (content) => set((state) => ({
         messages: [...state.messages, { role: 'user', content }]

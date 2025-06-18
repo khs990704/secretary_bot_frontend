@@ -1,22 +1,25 @@
 import { useEffect, useState, useRef } from 'react';
+import { useChatStore } from '../store/useChatStore';
+import { useChatMutation } from '../hooks/useChatMutation';
 
 function Home() {
-    const [messages, setMessages] = useState([
-        { sender: 'bot', text: '안녕하세요. 무엇을 도와드릴까요?' },
-    ]);
+    const { messages, addUserMessage, addBotMessage, updateLastBotMessage } = useChatStore()
     const [input, setInput] = useState('');
     const messagesEndRef = useRef(null);
+
+    const chatMutation = useChatMutation((reply) => {
+        updateLastBotMessage(reply)
+    })
 
     const handleSend = () => {
         const trimmed = input.trim();
         if (!trimmed) return;
 
-        setMessages((prev) => [
-        ...prev,
-        { sender: 'user', text: trimmed },
-        { sender: 'bot', text: '🤖 응답 준비 중...' }
-        ]);
-        setInput('');
+        addUserMessage(trimmed)
+        addBotMessage('🤖 응답 준비 중...')
+        chatMutation.mutate(trimmed)
+
+        setInput('')
     };
 
     useEffect(() => {
@@ -32,17 +35,17 @@ function Home() {
         <div className="space-y-2 bg-white rounded shadow p-4 h-full">
         {messages.map((msg, idx) => (
             <div
-            key={idx}
-            className={`max-w-[75%] px-4 py-2 rounded text-sm ${
-                msg.sender === 'user'
-                ? 'bg-blue-100 self-end text-right ml-auto'
-                : 'bg-gray-200 self-start text-left mr-auto'
-            }`}
+                key={idx}
+                className={`max-w-[75%] px-4 py-2 rounded text-sm ${
+                    msg.role === 'user'
+                    ? 'bg-blue-100 self-end text-right ml-auto'
+                    : 'bg-gray-200 self-start text-left mr-auto'
+                }`}
             >
             <span className="block text-xs text-gray-500 mb-1">
-                {msg.sender === 'user' ? '🧑 사용자' : '🤖 챗봇'}
+                {msg.role === 'user' ? '🧑 사용자' : '🤖 챗봇'}
             </span>
-            {msg.text}
+                {msg.content}
             </div>
         ))}
         <div ref={messagesEndRef} />

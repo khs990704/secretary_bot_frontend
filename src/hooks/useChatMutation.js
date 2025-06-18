@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 
 
 const sendMessage = async (message) => {
-  const response = await fetch('http://localhost:8001/api/chat', {
+  const response = await fetch('http://localhost:8010/api/chat', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

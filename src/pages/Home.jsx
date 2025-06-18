@@ -63,6 +63,11 @@ function Home() {
                 className="flex-1 px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-300"
             />
             <button
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+                파일
+            </button>
+            <button
                 onClick={handleSend}
                 className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
